@@ -4,4 +4,15 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "bentoml>=1.4.38",
+    "fastapi>=0.136.1",
+    "logfire>=4.32.1",
+    "protobuf>=6.33.6",
+    "pydantic-ai>=1.75.0",
+    "pypdf>=6.10.2",
+    "python-multipart>=0.0.27",
+    "torch>=2.11.0",
+    "transformers>=5.7.0",
+    "uvicorn>=0.46.0",
+]
