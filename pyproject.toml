@@ -7,7 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "bentoml>=1.4.38",
     "fastapi>=0.136.1",
-    "logfire>=4.32.1",
+    "logfire[fastapi]>=4.32.1",
     "protobuf>=6.33.6",
     "pydantic-ai>=1.75.0",
     "pypdf>=6.10.2",

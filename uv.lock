@@ -1637,6 +1637,9 @@ wheels = [
 ]
 
 [package.optional-dependencies]
+fastapi = [
+    { name = "opentelemetry-instrumentation-fastapi" },
+]
 httpx = [
     { name = "opentelemetry-instrumentation-httpx" },
 ]
@@ -1777,7 +1780,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "bentoml" },
     { name = "fastapi" },
-    { name = "logfire" },
+    { name = "logfire", extra = ["fastapi"] },
     { name = "protobuf" },
     { name = "pydantic-ai" },
     { name = "pypdf" },
@@ -1791,7 +1794,7 @@ dependencies = [
 requires-dist = [
     { name = "bentoml", specifier = ">=1.4.38" },
     { name = "fastapi", specifier = ">=0.136.1" },
-    { name = "logfire", specifier = ">=4.32.1" },
+    { name = "logfire", extras = ["fastapi"], specifier = ">=4.32.1" },
     { name = "protobuf", specifier = ">=6.33.6" },
     { name = "pydantic-ai", specifier = ">=1.75.0" },
     { name = "pypdf", specifier = ">=6.10.2" },
@@ -2334,6 +2337,22 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/00/3e/143cf5c034e58037307e6a24f06e0dd64b2c49ae60a965fc580027581931/opentelemetry_instrumentation_asgi-0.61b0.tar.gz", hash = "sha256:9d08e127244361dc33976d39dd4ca8f128b5aa5a7ae425208400a80a095019b5", size = 26691, upload-time = "2026-03-04T14:20:21.038Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/19/78/154470cf9d741a7487fbb5067357b87386475bbb77948a6707cae982e158/opentelemetry_instrumentation_asgi-0.61b0-py3-none-any.whl", hash = "sha256:e4b3ce6b66074e525e717efff20745434e5efd5d9df6557710856fba356da7a4", size = 16980, upload-time = "2026-03-04T14:19:10.894Z" },
+]
+
+[[package]]
+name = "opentelemetry-instrumentation-fastapi"
+version = "0.61b0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-instrumentation" },
+    { name = "opentelemetry-instrumentation-asgi" },
+    { name = "opentelemetry-semantic-conventions" },
+    { name = "opentelemetry-util-http" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/37/35/aa727bb6e6ef930dcdc96a617b83748fece57b43c47d83ba8d83fbeca657/opentelemetry_instrumentation_fastapi-0.61b0.tar.gz", hash = "sha256:3a24f35b07c557ae1bbc483bf8412221f25d79a405f8b047de8b670722e2fa9f", size = 24800, upload-time = "2026-03-04T14:20:32.759Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/91/05/acfeb2cccd434242a0a7d0ea29afaf077e04b42b35b485d89aee4e0d9340/opentelemetry_instrumentation_fastapi-0.61b0-py3-none-any.whl", hash = "sha256:a1a844d846540d687d377516b2ff698b51d87c781b59f47c214359c4a241047c", size = 13485, upload-time = "2026-03-04T14:19:30.351Z" },
 ]
 
 [[package]]
