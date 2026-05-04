@@ -1,4 +1,6 @@
-# Medical Analyzer
+# Claira - Clinical AI report Analyzer 
+
+## Medical Analyzer
 
 Smart medical report analysis — extracts diseases, medications, risks, and generates clinical recommendations.
 
