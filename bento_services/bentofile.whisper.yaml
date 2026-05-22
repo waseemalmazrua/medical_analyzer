@@ -1,0 +1,16 @@
+# bento_services/bentofile.whisper.yaml
+
+service: "bento_services.whisper_service:WhisperService"
+
+labels:
+  owner: waseem
+  project: medical-analyzer
+
+include:
+  - "bento_services/"
+  - "app/"
+
+python:
+  packages:
+    - bentoml
+    - faster-whisper
