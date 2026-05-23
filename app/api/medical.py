@@ -1,0 +1,55 @@
+# app/api/routes.py
+
+from fastapi import APIRouter, UploadFile, File
+
+from app.clients.whisper_client import WhisperClient
+from app.clients.ner_client import NERClient
+from app.agents.analyzer_agent import generate_clinical_report
+
+
+router =  APIRouter(
+    prefix="/medical",
+    tags=["Medical Analysis"]
+)
+
+whisper_client = WhisperClient()
+ner_client = NERClient()
+
+
+@router.post("/analyze-audio")
+async def analyze_audio(
+    file: UploadFile = File(...)
+):
+    
+    # اقرأ ملف الصوت
+    audio_bytes = await file.read()
+
+    # 1) Whisper ASR
+    whisper_result = await whisper_client.transcribe(
+        filename=file.filename,
+        audio_bytes=audio_bytes,
+        content_type=file.content_type,
+    )
+
+    transcript = whisper_result["transcript"]
+
+    # 2) Medical NER
+    ner_result = await ner_client.extract_entities(
+        transcript
+    )
+
+    entities = ner_result["entities"]
+
+    # 3) AI Agent
+    report = await generate_clinical_report(
+        transcript=transcript,
+        entities=entities,
+    )
+
+    # 4) Final Response
+    return {
+        "filename": file.filename,
+        "transcript": transcript,
+        "entities": entities,
+        "report": report.model_dump(),
+    }
