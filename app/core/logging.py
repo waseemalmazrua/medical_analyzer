@@ -1,7 +1,8 @@
 import logfire
+from fastapi import FastAPI
 
-def setup_logging(app):
 
+def setup_logging(app: FastAPI) -> None:
     logfire.configure()
 
     # FastAPI tracing
