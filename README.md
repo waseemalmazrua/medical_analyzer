@@ -1,93 +1,127 @@
-# Claira - Clinical AI report Analyzer 
+# CLAIRA — Clinical Language AI Reasoning Assistant
 
-## Medical Analyzer
+## Medical Voice Analyzer
 
-Smart medical report analysis — extracts diseases, medications, risks, and generates clinical recommendations.
+AI-powered clinical voice analysis system that transforms doctor speech into structured medical intelligence.
 
 ---
 
 ## Overview
 
-Upload a medical report (PDF or text) and the system will:
+CLAIRA enables clinicians to record or upload medical conversations and automatically generates structured clinical insights using AI.
 
-- Summarize the report in plain language
-- Extract diseases, medications, and lab results
-- Identify risk levels
-- Provide actionable recommendations
+The system can:
+
+* Convert doctor speech into medical transcripts
+* Extract diseases, symptoms, medications, dosages, labs, and demographics
+* Generate structured clinical summaries
+* Create SOAP notes and recommendations
+* Highlight possible medical risks
+* Provide AI-assisted clinical reasoning
 
 ---
 
 ## Tech Stack
 
-| Tool | Role |
-|------|------|
-| `blaze999/Medical-NER` (HuggingFace) | Extract 41 medical entities |
-| `Pydantic AI` | Agent orchestration + structured output |
-| `FastAPI` | API logic and endpoints |
-| `BentoML` | Model serving |
-| `Logfire` | Monitoring and tracing |
+| Tool                | Role                                       |
+| ------------------- | ------------------------------------------ |
+| `Faster-Whisper`    | Speech-to-text transcription               |
+| `GLiNER Biomedical` | Medical entity extraction                  |
+| `Claude Opus`       | Clinical reasoning + summarization         |
+| `Pydantic AI`       | Structured AI orchestration and validation |
+| `FastAPI`           | API gateway and orchestration              |
+| `BentoML`           | Model serving and inference                |
+| `httpx`             | Service-to-service communication           |
+| `Logfire`           | Monitoring and tracing                     |
 
 ---
 
 ## Architecture
 
-```
-PDF / Text Input
-       ↓
-   FastAPI  —  receives request
-       ↓
-HuggingFace NER  —  extracts entities (diseases, meds, labs)
-       ↓
-Pydantic AI Agent  —  structures output + generates recommendations
-       ↓
-BentoML  —  serves the NER model
-       ↓
-Logfire  —  monitors everything
-```
-
----
-
-## Installation
-
-```bash
-git clone https://github.com/waseemalmazrua/medical_analyzer
-cd medical_analyzer
-
-uv sync
-
-cp .env.example .env
+```text
+Doctor Audio
+      ↓
+Whisper Service
+(audio → transcript)
+      ↓
+Medical Correction Layer
+(correct medical terminology)
+      ↓
+Medical NER Service
+(extract symptoms, medications, diseases, labs)
+      ↓
+Pydantic AI Agent + Claude
+(clinical reasoning + structured report)
+      ↓
+FastAPI Response
+      ↓
+Frontend Dashboard
 ```
 
 ---
 
-## Environment Variables
+## System Design
 
-```env
-ANTHROPIC_API_KEY=
-LOGFIRE_TOKEN=
-```
+CLAIRA follows a microservice-based AI architecture.
 
----
+### Services
 
-## Run
-
-```bash
-uv run uvicorn main:app --reload
-```
-
-- API: `http://localhost:8000`
-- Docs: `http://localhost:8000/docs`
+| Service           | Responsibility                                  |
+| ----------------- | ----------------------------------------------- |
+| `Whisper Service` | Speech transcription                            |
+| `NER Service`     | Medical entity extraction                       |
+| `AI Agent Layer`  | Clinical reasoning and report generation        |
+| `FastAPI Gateway` | Request orchestration                           |
+| `Frontend`        | Recording, transcript, and report visualization |
 
 ---
 
-## Endpoints
+## Features
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/analyze` | Analyze medical report text |
-| `POST` | `/analyze/pdf` | Upload and analyze PDF |
-| `POST` | `/chat` | Chat with MedBot about the report |
-| `GET` | `/health` | Health check |
+* Medical voice recording
+* Audio upload support
+* AI-powered transcription
+* Medical entity extraction
+* Structured clinical summaries
+* SOAP note generation
+* Risk analysis
+* Clinical recommendations
+* Exportable reports
+* Real-time monitoring
+
+---
+
+## Example Pipeline
+
+```text
+Doctor Voice
+↓
+Whisper converts speech into text
+↓
+Medical NER extracts:
+- Diseases
+- Symptoms
+- Medications
+- Dosages
+- Lab results
+↓
+AI Agent generates:
+- Clinical Summary
+- SOAP Note
+- Risk Analysis
+- Recommendations
+```
+
+
+---
+
+## API Endpoints
+
+| Method | Endpoint                 | Description              |
+| ------ | ------------------------ | ------------------------ |
+| `POST` | `/medical/analyze-audio` | Analyze medical audio    |
+| `POST` | `/medical/upload-audio`  | Upload and analyze audio |
+| `GET`  | `/health`                | Health check             |
 
 ---
 
@@ -95,41 +129,78 @@ uv run uvicorn main:app --reload
 
 ```json
 {
-  "summary": "Patient has Type 2 Diabetes with hypertension and mild kidney impairment.",
-  "diseases": ["Type 2 Diabetes", "Hypertension", "Mild CKD"],
-  "medications": ["Metformin 1000mg", "Amlodipine 5mg", "Atorvastatin 20mg"],
-  "risks": [
-    { "label": "HbA1c", "value": 7.8, "level": "high" },
-    { "label": "Creatinine", "value": 1.4, "level": "moderate" }
-  ],
-  "recommendations": [
-    "Review Metformin dosage due to reduced kidney function",
-    "Improve diet to control HbA1c",
-    "Follow-up appointment in 4 weeks"
-  ],
-  "recommend_doctor": true,
-  "confidence": 0.94
+  "transcript": "Patient reports chest pain and shortness of breath.",
+
+  "entities": {
+    "symptoms": [
+      "chest pain",
+      "shortness of breath"
+    ],
+    "conditions": [
+      "hypertension"
+    ],
+    "medications": [
+      "aspirin"
+    ]
+  },
+
+  "report": {
+    "clinical_summary": "Patient presents with cardiopulmonary symptoms.",
+
+    "possible_risks": [
+      "Acute coronary syndrome"
+    ],
+
+    "recommendations": [
+      {
+        "title": "ECG",
+        "urgency": "high"
+      }
+    ]
+  }
 }
 ```
 
 ---
 
+## Frontend Vision
+
+The frontend is designed as a modern clinical dashboard.
+
+Features include:
+
+* Voice recording
+* Live recording indicators
+* Transcript visualization
+* Highlighted medical entities
+* Clinical summary cards
+* SOAP note viewer
+* Export functionality
+* Responsive healthcare-grade UI
+
+---
+
 ## Roadmap
 
-- [x] Project setup
-- [ ] HuggingFace NER integration
-- [ ] Pydantic AI agent
-- [ ] FastAPI endpoints
-- [ ] BentoML model serving
-- [ ] MedBot chatbot
-- [ ] Frontend (React + Tailwind)
-- [ ] Logfire monitoring
+* [x] Faster-Whisper integration
+* [x] Medical NER pipeline
+* [x] Pydantic AI structured outputs
+* [x] BentoML microservices
+* [ ] Real-time streaming transcription
+* [ ] React frontend
+* [ ] Authentication system
+* [ ] PDF export
+* [ ] Docker deployment
+* [ ] Cloud GPU deployment
+* [ ] Multi-language support
 
 ---
 
 ## Disclaimer
 
-This tool is for informational purposes only and is not a substitute for professional medical advice.
+CLAIRA is intended for clinical assistance and research purposes only.
+
+AI-generated outputs must always be reviewed by qualified healthcare professionals.
 
 ---
 
