@@ -1,9 +1,14 @@
 from pydantic_ai import Agent
+import logfire
 from app.schemas.agent_output import ClinicalReport
+import os 
+from dotenv import load_dotenv
 
+load_dotenv()
+os.getenv("OPENAI_API_KEY")
 
 clinical_agent = Agent(
-    "anthropic:claude-opus-4-1",
+    "openai:gpt-5.2",
     output_type=ClinicalReport,
     system_prompt="""
 You are a clinical documentation assistant.
@@ -24,6 +29,7 @@ async def generate_clinical_report(
     transcript: str,
     entities: list,
 ) -> ClinicalReport:
+
 
     prompt = f"""
 Transcript:

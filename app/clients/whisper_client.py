@@ -1,6 +1,6 @@
 # app/clients/whisper_client.py
-
 import httpx
+import logfire
 
 
 class WhisperClient:
@@ -13,17 +13,22 @@ class WhisperClient:
         audio_bytes: bytes,
         content_type: str,
     ) -> dict:
-        async with httpx.AsyncClient(timeout=300) as client:
-            response = await client.post(
-                f"{self.base_url}/transcribe",
-                files={
-                    "file": (
-                        filename,
-                        audio_bytes,
-                        content_type,
-                    )
-                },
-            )
 
-            response.raise_for_status()
-            return response.json()
+        with logfire.span("Call Whisper Service"):
+
+            async with httpx.AsyncClient(timeout=300) as client:
+
+                response = await client.post(
+                    f"{self.base_url}/transcribe",
+                    files={
+                        "file": (
+                            filename,
+                            audio_bytes,
+                            content_type,
+                        )
+                    },
+                )
+
+                response.raise_for_status()
+
+                return response.json()
