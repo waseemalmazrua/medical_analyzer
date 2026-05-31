@@ -1,6 +1,6 @@
 # app/api/routes.py
 
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File , HTTPException
 
 from app.clients.whisper_client import WhisperClient
 from app.clients.ner_client import NERClient
@@ -21,35 +21,47 @@ async def analyze_audio(
     file: UploadFile = File(...)
 ):
     
+    if not file.content_type or not file.content_type.startswith("audio/"):
+        raise HTTPException(status_code=400, detail="Invalid audio file")
+    
+    try:
     # اقرأ ملف الصوت
-    audio_bytes = await file.read()
+        audio_bytes = await file.read()
 
-    # 1) Whisper ASR
-    whisper_result = await whisper_client.transcribe(
-        filename=file.filename,
-        audio_bytes=audio_bytes,
-        content_type=file.content_type,
-    )
+        # 1) Whisper ASR
+        whisper_result = await whisper_client.transcribe(
+            filename=file.filename,
+            audio_bytes=audio_bytes,
+            content_type=file.content_type,
+        )
 
-    transcript = whisper_result["transcript"]
+        transcript = whisper_result["transcript"]
 
-    # 2) Medical NER
-    ner_result = await ner_client.extract_entities(
-        transcript
-    )
+        # 2) Medical NER
+        ner_result = await ner_client.extract_entities(
+            transcript
+        )
 
-    entities = ner_result["entities"]
+        entities = ner_result["entities"]
 
-    # 3) AI Agent
-    report = await generate_clinical_report(
-        transcript=transcript,
-        entities=entities,
-    )
+        # 3) AI Agent
+        report = await generate_clinical_report(
+            transcript=transcript,
+            entities=entities,
+        )
 
-    # 4) Final Response
-    return {
-        "filename": file.filename,
-        "transcript": transcript,
-        "entities": entities,
-        "report": report.model_dump(),
-    }
+        # 4) Final Response
+        return {
+            "filename": file.filename,
+            "transcript": transcript,
+            "entities": entities,
+            "report": report.model_dump(),
+        }
+
+
+    except HTTPException:
+        raise
+
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
