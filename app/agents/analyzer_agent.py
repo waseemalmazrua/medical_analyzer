@@ -10,7 +10,7 @@ os.getenv("OPENAI_API_KEY")
 clinical_agent = Agent(
     "openai:gpt-5.2",
     output_type=ClinicalReport,
-    system_prompt="""
+    instructions="""
 You are a clinical documentation assistant.
 
 Use the transcript and extracted medical entities to generate a structured clinical report.
