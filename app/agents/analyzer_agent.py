@@ -1,5 +1,4 @@
 from pydantic_ai import Agent
-import logfire
 from app.schemas.agent_output import ClinicalReport
 import os 
 from dotenv import load_dotenv
