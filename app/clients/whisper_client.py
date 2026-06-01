@@ -14,7 +14,7 @@ class WhisperClient:
         content_type: str,
     ) -> dict:
 
-        with logfire.span("Call Whisper Service"):
+        # with logfire.span("Call Whisper Service"):
 
             async with httpx.AsyncClient(timeout=300) as client:
 

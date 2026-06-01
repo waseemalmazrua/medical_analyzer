@@ -10,7 +10,7 @@ class NERClient:
 
     async def extract_entities(self, text: str) -> dict:
 
-        with logfire.span("Call NER Service",text_legth=len(text)):
+        # with logfire.span("Call NER Service",text_legth=len(text)):
 
             async with httpx.AsyncClient(timeout=120) as client:
 
