@@ -3,7 +3,7 @@ from fastapi import FastAPI
 
 
 def setup_logging(app: FastAPI) -> None:
-    print("LOGFIRE ENABLED")
+    print("LOGFIRE ENABLED...")
 
     logfire.configure()
 

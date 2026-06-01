@@ -4,7 +4,11 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key:
+    print("OPEN_API_KEY is loaded...")
+else:
+    print(" OPEN_API_KEY not found")
 
 clinical_agent = Agent(
     "openai:gpt-5.2",
