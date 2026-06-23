@@ -36,6 +36,8 @@ class WhisperClient:
             language="en",
         )
 
+        # print("the Model Dumb is : ",transcription.model_dump())
+
         transcript = transcription.text
 
         return {
