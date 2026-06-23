@@ -2,8 +2,8 @@
 
 import bentoml
 from gliner import GLiNER
-
-
+import logfire
+logfire.configure(service_name="NERService",distubution_tracing=True)
 @bentoml.service(traffic={"timeout": 120})
 class NERService:
     def __init__(self):
@@ -23,13 +23,16 @@ class NERService:
         ]
 
     @bentoml.api
-    def extract_entities(self, text: str , /) -> dict:
-        entities = self.model.predict_entities(
-            text,
-            self.labels,
-            threshold=0.5,
-        )
+    def extract_entities(self, text: str) -> dict:
 
-        return {
-            "entities": entities
-        }
+        with logfire.span("gliner predict",text_legth=len(text)):
+
+            entities = self.model.predict_entities(
+                text,
+                self.labels,
+                threshold=0.5,
+            )
+
+            return {
+                "entities": entities
+            }

@@ -9,6 +9,7 @@ dependencies = [
     "fastapi>=0.136.1",
     "faster-whisper>=1.2.1",
     "gliner>=0.2.24",
+    "groq>=1.2.0",
     "logfire[fastapi,httpx]>=4.32.1",
     "paddleocr>=3.5.0",
     "paddlepaddle>=3.3.1",

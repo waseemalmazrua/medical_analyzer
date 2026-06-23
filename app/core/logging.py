@@ -5,7 +5,7 @@ from fastapi import FastAPI
 def setup_logging(app: FastAPI) -> None:
     print("LOGFIRE ENABLED...")
 
-    logfire.configure()
+    logfire.configure(service_name="CLAIRA",distributed_tracing=True)
 
     # FastAPI tracing
     logfire.instrument_fastapi(app)
