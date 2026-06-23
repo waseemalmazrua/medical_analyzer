@@ -2,14 +2,18 @@
 
 import bentoml
 from gliner import GLiNER
+import torch
 import logfire
 logfire.configure(service_name="NERService",distubution_tracing=True)
 @bentoml.service(traffic={"timeout": 120})
 class NERService:
     def __init__(self):
+        device = "cuda" if torch.cuda.is_avaliable() else "cpu"
         self.model = GLiNER.from_pretrained(
             "Ihor/gliner-biomed-large-v1.0"
         )
+        self.model.to(device)
+        print(f"GLiNER loaded on {device}")
 
         self.labels = [
             "disease",
