@@ -2,7 +2,7 @@
 
 import httpx
 import logfire
-
+from app.schemas.NER import NEROutput
 
 class NERClient:
     def __init__(self, base_url: str = "http://localhost:3001"):
@@ -12,7 +12,7 @@ class NERClient:
     
     
 
-    async def extract_entities(self, text: str) -> dict:
+    async def extract_entities(self, text: str) -> NEROutput:
 
         # with logfire.span("Call NER Service",text_legth=len(text)):
 
@@ -25,5 +25,6 @@ class NERClient:
                 )
 
                 response.raise_for_status()
+                data = response.json()
 
-                return response.json()
+                return NEROutput.model_validate(data)
