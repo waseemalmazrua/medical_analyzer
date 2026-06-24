@@ -7,11 +7,15 @@ labels:
   project: medical-analyzer
 
 include:
-  - "bento_services/"
-  - "app/"
+  - "pyproject.toml"
+  - "uv.lock"
+  - "bento_services/**"
+  - "app/**"
 
 python:
   packages:
     - bentoml
     - gliner
     - torch
+    - logfire
+    - pydantic

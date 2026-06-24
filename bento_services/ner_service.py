@@ -7,7 +7,7 @@ import logfire
 from app.schemas.NER import NEROutput
 
 logfire.configure(service_name="NERService",distributed_tracing=True)
-@bentoml.service(traffic={"timeout": 120})
+@bentoml.service(resources={"gpu": 1},traffic={"timeout": 120})
 class NERService:
     def __init__(self):
         device = "cuda" if torch.cuda.is_available() else "cpu"
