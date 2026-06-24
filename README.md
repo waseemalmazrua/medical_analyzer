@@ -8,7 +8,7 @@ AI-powered clinical voice analysis system that transforms doctor speech into str
 
 ## Overview
 
-CLAIRA enables clinicians to record or upload medical conversations and automatically generates structured clinical insights using AI.
+CLAIRA enables clinicians to record (maybe CLAIRA v2) or upload medical conversations and automatically generates structured clinical insights using AI.
 
 The system can:
 
@@ -27,7 +27,7 @@ The system can:
 | ------------------- | ------------------------------------------ |
 | `Faster-Whisper`    | Speech-to-text transcription               |
 | `GLiNER Biomedical` | Medical entity extraction                  |
-| `Claude Opus`       | Clinical reasoning + summarization         |
+| `OPENAI GPT-5.2`    | Clinical reasoning + summarization         |
 | `Pydantic AI`       | Structured AI orchestration and validation |
 | `FastAPI`           | API gateway and orchestration              |
 | `BentoML`           | Model serving and inference                |
@@ -50,7 +50,7 @@ Medical Correction Layer
 Medical NER Service
 (extract symptoms, medications, diseases, labs)
       ↓
-Pydantic AI Agent + Claude
+Pydantic AI Agent + GPT
 (clinical reasoning + structured report)
       ↓
 FastAPI Response
