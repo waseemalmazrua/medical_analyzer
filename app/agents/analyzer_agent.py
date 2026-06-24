@@ -4,11 +4,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-# api_key = os.getenv("OPENAI_API_KEY")
-# if api_key:
-#     print("OPEN_API_KEY is loaded...")
-# else:
-#     print(" OPEN_API_KEY not found")
+api_key = os.getenv("OPENAI_API_KEY")
+if api_key is None:
+    raise ValueError("OPENAI API Key not There...")
 
 clinical_agent = Agent(
     "openai:gpt-5.2",
@@ -30,7 +28,7 @@ Rules:
 
 async def generate_clinical_report(
     transcript: str,
-    entities: list,
+    entities: list[dict],
 ) -> ClinicalReport:
 
 
