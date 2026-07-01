@@ -5,7 +5,7 @@ from fastapi import APIRouter, UploadFile, File , HTTPException
 from app.clients.whisper_client import WhisperClient
 from app.clients.ner_client import NERClient
 from app.agents.analyzer_agent import generate_clinical_report
-
+from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
 
 router =  APIRouter(
     prefix="/medical",
@@ -19,7 +19,7 @@ ner_client = NERClient()
 @router.post("/analyze-audio")
 async def analyze_audio(
     file: UploadFile = File(...)
-):
+) -> AudioAnalyzerResponse:
     
     if not file.content_type or not file.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail="Invalid audio file")
@@ -51,12 +51,12 @@ async def analyze_audio(
         )
 
         # 4) Final Response
-        return {
-            "filename": file.filename,
-            "transcript": transcript,
-            "entities": entities,
-            "report": report.model_dump(),
-        }
+        return AudioAnalyzerResponse(
+            filename=file.filename,
+            transcript=transcript,
+            entities=entities,
+            report=report
+        )
 
 
     except HTTPException:
