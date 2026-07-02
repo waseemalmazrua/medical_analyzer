@@ -14,7 +14,7 @@ class NERClient:
 
     async def extract_entities(self, text: str) -> NEROutput:
 
-        # with logfire.span("Call NER Service",text_legth=len(text)):
+        with logfire.span("Call NER Service",text_legth=len(text)):
 
                 response = await self.client.post(
                     f"{self.base_url}/extract_entities",

@@ -24,8 +24,9 @@ image = (
         "bentoml==1.4.38",
         "gliner==0.2.24",
         "torch==2.11.0",
-        "logfire==4.32.1"
+        "logfire==4.32.1",
         "python-dotenv>=1.2.2",
+        
     )
 )
 @bentoml.service(image=image,resources={"gpu": 1},traffic={"timeout": 120})
