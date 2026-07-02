@@ -4,18 +4,28 @@ import bentoml
 from gliner import GLiNER
 import torch
 import logfire
+import os
+from dotenv import load_dotenv
 from app.schemas.NER import NEROutput
 
-logfire.configure(service_name="NERService",distributed_tracing=True)
+
+load_dotenv()
+token = os.getenv("LOGFIRE_TOKEN")
+if token is None:
+    raise ValueError(" token logfire not available")
+
+    
+logfire.configure(token=token,service_name="NERService",distributed_tracing=True)
 image = (
     bentoml.images.Image(
-        base_image="3.11-slim"
+        base_image="python:3.11-slim"
     )
     .python_packages(
         "bentoml==1.4.38",
         "gliner==0.2.24",
         "torch==2.11.0",
-        "logfire==4.32.1",
+        "logfire==4.32.1"
+        "python-dotenv>=1.2.2",
     )
 )
 @bentoml.service(image=image,resources={"gpu": 1},traffic={"timeout": 120})
