@@ -28,22 +28,27 @@ class WhisperClient:
         audio_bytes: bytes,
         content_type: str,
     ) -> dict:
+        
+        with logfire.span("Call Whisper Service",text_legth=len(audio_bytes)):
 
-        transcription = self.client.audio.transcriptions.create(
-            file=(filename, audio_bytes),
-            model="whisper-large-v3-turbo",
-            temperature=0,
-            language="en",
-        )
+            transcription = self.client.audio.transcriptions.create(
+                file=(filename, audio_bytes),
+                model="whisper-large-v3-turbo",
+                temperature=0,
+                language="en",
+            )
+
 
         # print("the Model Dumb is : ",transcription.model_dump())
 
-        transcript = transcription.text
+            transcript = transcription.text
 
-        return {
-            "transcript": transcript
-        }
-    
+            logfire.info("Transcription Completed",transcript_legth=len(transcript),)
+
+            return {
+                "transcript": transcript
+            }
+        
 
 
 
