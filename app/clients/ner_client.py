@@ -8,6 +8,10 @@ class NERClient:
     def __init__(self, base_url: str = "http://localhost:3001"):
         self.base_url = base_url
         self.client = httpx.AsyncClient(timeout=200)
+
+        
+    async def close (self):
+        await self.client.aclose()
     
     
     

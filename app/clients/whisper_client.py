@@ -19,6 +19,9 @@ class WhisperClient:
         
 
         self.client = Groq(api_key=api_key)
+
+    def close(self):
+        self.client.close()
  
     
 
