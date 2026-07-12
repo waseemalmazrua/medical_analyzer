@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 from app.api.medical import router as medical_router
-from app.core.logging import setup_logging
-
+from app.core.logging import setup_observability
 
 app = FastAPI(title="Medical Analyzer API")
 
 # Setup Logfire tracing
-setup_logging(app)
+setup_observability(app)
 
 app.include_router(medical_router)
 

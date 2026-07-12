@@ -2,7 +2,7 @@ import logfire
 from fastapi import FastAPI
 
 
-def setup_logging(app: FastAPI) -> None:
+def setup_observability(app: FastAPI) -> None:
     print("LOGFIRE ENABLED...")
 
     logfire.configure(service_name="CLAIRA",distributed_tracing=True)

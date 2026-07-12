@@ -10,7 +10,7 @@ class NERClient:
         self.client = httpx.AsyncClient(timeout=200)
 
         
-    async def close (self):
+    async def aclose(self):
         await self.client.aclose()
     
     

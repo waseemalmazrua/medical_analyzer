@@ -11,6 +11,6 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         await app.state.services.whisper.close()
-        await app.state.services.ner.close()
+        await app.state.services.ner.aclose()
 
     
