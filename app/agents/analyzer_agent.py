@@ -30,6 +30,7 @@ async def generate_clinical_report(
     transcript: str,
     entities: list[dict],
 ) -> ClinicalReport:
+    
 
 
     prompt = f"""
