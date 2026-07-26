@@ -45,7 +45,7 @@ async def analyze_audio(
             transcript
         )
 
-        entities = ner_result["entities"]
+        entities = ner_result.entities
 
         # 3) AI Agent
         report = await generate_clinical_report(

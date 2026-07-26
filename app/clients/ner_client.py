@@ -2,12 +2,22 @@
 
 import httpx
 import logfire
-from app.schemas.NER import NEROutput
+from app.schemas.NER import NEROutput , NerRequest
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+runpod = os.getenv("RUNPOD_API_KEY")
+
+if not runpod:
+    raise RuntimeError("RUNPOD_API_KEY is not loaded")
 
 class NERClient:
-    def __init__(self, base_url: str = "http://localhost:3001"):
-        self.base_url = base_url
-        self.client = httpx.AsyncClient(timeout=200)
+    def __init__(self, base_url: str = "https://qp4puae2rabqjl.api.runpod.ai" ):
+        self.base_url = "http://localhost:3001"
+        self.client = httpx.AsyncClient(timeout=300)
+
+
 
         
     async def aclose(self):
@@ -16,14 +26,17 @@ class NERClient:
     
     
 
-    async def extract_entities(self, text: str) -> NEROutput:
+    async def extract_entities(self, NerRequest: NerRequest) -> NEROutput:
 
-        with logfire.span("Call NER Service",text_legth=len(text)):
+        with logfire.span("Call NER Service",text_legth=len(NerRequest.text)):
 
                 response = await self.client.post(
                     f"{self.base_url}/extract_entities",
                     json={
-                        "text": text
+                        "text": NerRequest.text
+                    },
+                    headers={
+                        "Authorization": f"Bearer {runpod}"
                     },
                     
                 )

@@ -12,5 +12,5 @@ app.include_router(medical_router)
 
 
 @app.get("/")
-def read_root():
+def health_check():
     return {"message": "Welcome to Medical Analyzer AI"}

@@ -8,3 +8,7 @@ class Entity(BaseModel):
 
 class NEROutput(BaseModel):
     entities : list[Entity]
+
+
+class NerRequest(BaseModel):
+    text : str

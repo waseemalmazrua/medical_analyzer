@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "alembic>=1.18.5",
+    "asyncpg>=0.31.0",
     "bentoml>=1.4.38",
     "fastapi>=0.136.1",
     "faster-whisper>=1.2.1",
@@ -15,6 +17,8 @@ dependencies = [
     "pydantic-ai>=1.75.0",
     "python-dotenv>=1.2.2",
     "python-multipart>=0.0.27",
+    "sqlalchemy>=2.0.51",
+    "sqlmodel>=0.0.39",
     "torch>=2.11.0",
     "transformers>=5.7.0",
     "uvicorn>=0.46.0",

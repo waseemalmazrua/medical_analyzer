@@ -6,5 +6,5 @@ labels:
   project: medical-analyzer
 
 include:
-  - "app/**"
+  - "app/schemas/**"
   - "bento_services/**"
