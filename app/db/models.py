@@ -5,7 +5,6 @@ from sqlalchemy import Column, DateTime, ForeignKey, Table
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlmodel import Field, SQLModel
 
-
 # تعريف خارجي مختصر لجدول Supabase Auth.
 # نحن لا ننشئه ولا نديره.
 auth_users = Table(
@@ -45,7 +44,7 @@ class Profile(SQLModel, table=True):
     )
 
     created_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(timezone.UTC),
         sa_column=Column(
             DateTime(timezone=True),
             nullable=False,

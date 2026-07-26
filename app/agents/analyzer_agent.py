@@ -1,7 +1,9 @@
-from pydantic_ai import Agent
-from app.schemas.agent_output import ClinicalReport
-import os 
+import os
+
 from dotenv import load_dotenv
+from pydantic_ai import Agent
+
+from app.schemas.agent_output import ClinicalReport
 
 load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
@@ -22,7 +24,7 @@ Rules:
 - Recommendations must be cautious and require clinician review.
 - Always include this disclaimer:
   "AI-generated output. Must be reviewed by a licensed clinician."
-"""
+""",
 )
 
 
@@ -30,8 +32,6 @@ async def generate_clinical_report(
     transcript: str,
     entities: list[dict],
 ) -> ClinicalReport:
-    
-
 
     prompt = f"""
 Transcript:

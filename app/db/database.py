@@ -11,7 +11,6 @@ from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 
-
 engine: AsyncEngine = create_async_engine(
     settings.database_url,
     echo=False,
@@ -41,9 +40,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def check_database_connection() -> None:
     async with engine.connect() as connection:
-        result = await connection.execute(
-            text("SELECT 1")
-        )
+        result = await connection.execute(text("SELECT 1"))
 
         value = result.scalar_one()
 

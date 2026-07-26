@@ -14,7 +14,6 @@ from app.core.config import settings
 # داخل SQLModel.metadata.
 from app.db.models import Profile  # noqa: F401
 
-
 config = context.config
 
 config.set_main_option(
@@ -45,15 +44,11 @@ def include_object(
         auth.users
     """
 
-    if (
+    return not (
         type_ == "table"
         and not reflected
         and object_.info.get("skip_autogenerate", False)
-    ):
-        return False
-
-    return True
-
+    )
 
 def configure_context(
     *,
@@ -78,9 +73,7 @@ def configure_context(
         return
 
     if url is None:
-        raise ValueError(
-            "A database connection or URL must be provided."
-        )
+        raise ValueError("A database connection or URL must be provided.")
 
     context.configure(
         url=url,
@@ -102,9 +95,7 @@ def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
 
     if not url:
-        raise RuntimeError(
-            "SQLAlchemy database URL is not configured."
-        )
+        raise RuntimeError("SQLAlchemy database URL is not configured.")
 
     configure_context(url=url)
 

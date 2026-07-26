@@ -1,6 +1,4 @@
-from typing import List, Optional
 from pydantic import BaseModel, Field
-
 
 
 class SOAPNote(BaseModel):
@@ -17,10 +15,10 @@ class Recommendation(BaseModel):
 
 
 class ClinicalReport(BaseModel):
-    chief_complaint: Optional[str]
+    chief_complaint: str | None
     clinical_summary: str
-    key_findings: List[str]
-    possible_risks: List[str]
+    key_findings: list[str]
+    possible_risks: list[str]
     soap_note: SOAPNote
-    recommendations: List[Recommendation]
+    recommendations: list[Recommendation]
     disclaimer: str

@@ -1,16 +1,14 @@
 # app/api/routes.py
 
-from fastapi import APIRouter, UploadFile, File , HTTPException , Request
+from typing import Annotated
 
-from app.clients.whisper_client import WhisperClient
-from app.clients.ner_client import NERClient
+import httpx
+from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+
 from app.agents.analyzer_agent import generate_clinical_report
 from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
 
-router =  APIRouter(
-    prefix="/medical",
-    tags=["Medical Analysis"]
-)
+router = APIRouter(prefix="/medical", tags=["Medical Analysis"])
 
 # whisper_client = WhisperClient()
 # ner_client = NERClient()
@@ -19,16 +17,15 @@ router =  APIRouter(
 @router.post("/analyze-audio")
 async def analyze_audio(
     request: Request,
-    file: UploadFile = File(...),
+    file: Annotated[UploadFile, File()],
 ) -> AudioAnalyzerResponse:
-    
+
     if not file.content_type or not file.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail="Invalid audio file")
-    
-    try:
 
+    try:
         services = request.app.state.services
-    # اقرأ ملف الصوت
+        # اقرأ ملف الصوت
         audio_bytes = await file.read()
 
         # 1) Whisper ASR
@@ -41,9 +38,7 @@ async def analyze_audio(
         transcript = whisper_result["transcript"]
 
         # 2) Medical NER
-        ner_result = await services.ner.extract_entities(
-            transcript
-        )
+        ner_result = await services.ner.extract_entities(transcript)
 
         entities = ner_result.entities
 
@@ -58,13 +53,14 @@ async def analyze_audio(
             filename=file.filename,
             transcript=transcript,
             entities=entities,
-            report=report
+            report=report,
         )
-
 
     except HTTPException:
         raise
 
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except httpx.HTTPError as exc:
+        raise HTTPException(
+            status_code=502,
+            detail="Upstream service request failed.",
+        ) from exc

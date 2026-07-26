@@ -1,6 +1,9 @@
-from fastapi import FastAPI
 from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
 from app.lifespans.services import Services
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -10,8 +13,5 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-             
-             app.state.services.whisper.close()
-             await app.state.services.ner.aclose()
-
-    
+        app.state.services.whisper.close()
+        await app.state.services.ner.aclose()

@@ -1,12 +1,14 @@
 # bento_services/ner_service.py
 
-import bentoml
-from gliner import GLiNER
-import torch
-import logfire
 import os
+
+import bentoml
+import logfire
+import torch
 from dotenv import load_dotenv
-from app.schemas.NER import NEROutput , NerRequest
+from gliner import GLiNER
+
+from app.schemas.NER import NEROutput, NerRequest
 
 # Load .env
 load_dotenv()
@@ -23,9 +25,7 @@ logfire.configure(
 )
 
 image = (
-    bentoml.images.Image(
-        base_image="python:3.11-slim"
-    )
+    bentoml.images.Image(base_image="python:3.11-slim")
     .run(
         "pip install --no-cache-dir torch torchvision torchaudio "
         "--index-url https://download.pytorch.org/whl/cu124"
@@ -38,7 +38,7 @@ image = (
     )
     .run(
         'python -c "from gliner import GLiNER; '
-        'GLiNER.from_pretrained(\'Ihor/gliner-biomed-large-v1.0\')"'
+        "GLiNER.from_pretrained('Ihor/gliner-biomed-large-v1.0')\""
     )
 )
 # Hugging Face Token
