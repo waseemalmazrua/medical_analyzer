@@ -14,7 +14,7 @@ from app.schemas.ner import NEROutput, NerRequest
 # Load .env
 load_dotenv()
 
-token = os.getenv("LOGFIRE_TOKEN")
+token = settings.logfire_token
 if token is None:
     raise ValueError("token logfire not available")
 

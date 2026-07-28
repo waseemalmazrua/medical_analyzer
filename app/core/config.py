@@ -1,12 +1,12 @@
-from pydantic import SecretStr
+from pydantic import Field, PostgresDsn, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    database_url: str
+    database_url: PostgresDsn = Field(alias="DATABASE_URL")
     openai_api_key: SecretStr
     groq_api_key: SecretStr
-    logfire_token: SecretStr
+    logfire_token: str
     hf_token: SecretStr
     runpod_api_key: SecretStr
 

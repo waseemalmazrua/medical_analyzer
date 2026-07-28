@@ -6,7 +6,7 @@ import httpx
 import logfire
 from dotenv import load_dotenv
 
-from app.schemas.NER import NEROutput, NerRequest
+from app.schemas.ner import NEROutput, NerRequest
 
 load_dotenv()
 
