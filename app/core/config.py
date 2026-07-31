@@ -7,11 +7,11 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr
     groq_api_key: SecretStr
     logfire_token: str
-    hf_token: SecretStr
-    runpod_api_key: SecretStr
+    hf_token: str
+    runpod_api_key:str 
 
     model_config = SettingsConfigDict(
-        env_file=".env", env_file_encoding="utf-8", extra="ignore", case_sensitive=False
+        env_file=".env", env_file_encoding="utf-8", extra="ignore", case_sensitive=False,
     )
 
 

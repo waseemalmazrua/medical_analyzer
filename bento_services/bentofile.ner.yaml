@@ -1,5 +1,7 @@
 # bento_services/bentofile.ner.yaml
 service: "bento_services.ner_service:NERService"
+name: "ner_service"
+
 
 labels:
   owner: waseem
@@ -7,4 +9,5 @@ labels:
 
 include:
   - "app/schemas/**"
+  - "app/core/**"
   - "bento_services/**"

@@ -1,26 +1,24 @@
 # bento_services/ner_service.py
 
-import os
 
 import bentoml
 import logfire
 import torch
-from dotenv import load_dotenv
 from gliner import GLiNER
 
-from app.core.config import settings
 from app.schemas.ner import NEROutput, NerRequest
+from app.schemas.ping import PingResponse
+from bento_services.ner_config import ner_settings
 
 # Load .env
-load_dotenv()
 
-token = settings.logfire_token
+token = ner_settings.logfire_token
 if token is None:
     raise ValueError("token logfire not available")
 
 # Logfire Configuration
 logfire.configure(
-    token=token,
+    token=token.get_secret_value(),
     service_name="NERService",
     distributed_tracing=True,
 )
@@ -43,11 +41,6 @@ image = (
         "GLiNER.from_pretrained('Ihor/gliner-biomed-large-v1.0')\""
     )
 )
-# Hugging Face Token
-token = os.getenv("HF_TOKEN")
-if token is None:
-    raise ValueError("Hugging Face token not available")
-
 
 # Starting the BentoML Service
 @bentoml.service(
@@ -61,7 +54,7 @@ class NERService:
 
         self.model = GLiNER.from_pretrained(
             "Ihor/gliner-biomed-large-v1.0",
-            token=settings.hf_token,
+            token=ner_settings.hf_token.get_secret_value(),
         )
 
         self.model.to(self.device)
@@ -88,6 +81,14 @@ class NERService:
             "demographic information",
         ]
 
+
+
+
+    @bentoml.api
+    def ping(self) -> PingResponse:
+        return PingResponse(status="ok")
+
+
     # GLiNER predict
     @bentoml.api
     def extract_entities(self, request: NerRequest) -> NEROutput:
@@ -101,6 +102,12 @@ class NERService:
                     request.text,
                     self.labels,
                     threshold=0.5,
+                )
+
+                logfire.info(
+                    "GliNER Output Completed",
+                    entities_legth=len(entities),
+                    entities=entities,
                 )
 
             return NEROutput(entities=entities)

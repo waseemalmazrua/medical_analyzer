@@ -41,6 +41,7 @@ class WhisperClient:
             logfire.info(
                 "Transcription Completed",
                 transcript_legth=len(transcript),
+                transcription=transcript,
             )
 
             return {"transcript": transcript}

@@ -7,6 +7,7 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 
 from app.agents.analyzer_agent import generate_clinical_report
 from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
+from app.schemas.ner import NerRequest
 
 router = APIRouter(prefix="/medical", tags=["Medical Analysis"])
 
@@ -38,7 +39,7 @@ async def analyze_audio(
         transcript = whisper_result["transcript"]
 
         # 2) Medical NER
-        ner_result = await services.ner.extract_entities(transcript)
+        ner_result = await services.ner.extract_entities(NerRequest(text=transcript))
 
         entities = ner_result.entities
 
