@@ -1,3 +1,5 @@
+from functools import cache
+
 from pydantic import Field, PostgresDsn, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -12,5 +14,8 @@ class Settings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", extra="ignore", case_sensitive=False,
     )
 
+@cache
+def get_settings():
+    return Settings()
 
-settings = Settings()
+settings = get_settings()
