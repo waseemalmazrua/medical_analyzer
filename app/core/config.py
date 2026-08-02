@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     database_url: PostgresDsn = Field(alias="DATABASE_URL")
     openai_api_key: SecretStr
     groq_api_key: SecretStr
+    runpod_api_key: SecretStr
  
 
     model_config = SettingsConfigDict(

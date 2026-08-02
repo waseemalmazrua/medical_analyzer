@@ -4,15 +4,15 @@
 import httpx
 import logfire
 
-from bento_services.ner_config import ner_settings
+from app.core.config import settings
 from bento_services.ner_schema import NEROutput, NerRequest
 
-runpod = ner_settings.runpod_api_key.get_secret_value()
+runpod_api_key = settings.runpod_api_key
 
-if not runpod:
+if runpod_api_key is None:
     raise RuntimeError("RUNPOD_API_KEY is not loaded")
 
-
+runpod = runpod_api_key.get_secret_value()
 
 
 class NERClient:
@@ -31,7 +31,8 @@ class NERClient:
             try:
                 response = await self.client.post(
                     f"{self.base_url}/extract_entities",
-                    json={"text": request.text},
+                    json={"request": {"text": request.text},
+                          },
                     headers={
                         "Authorization": f"Bearer {runpod}",
                     },
