@@ -7,7 +7,7 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 
 from app.agents.analyzer_agent import generate_clinical_report
 from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
-from app.schemas.ner import NerRequest
+from bento_services.ner_schema import NerRequest
 
 router = APIRouter(prefix="/medical", tags=["Medical Analysis"])
 

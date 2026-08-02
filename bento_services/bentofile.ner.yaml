@@ -8,6 +8,4 @@ labels:
   project: medical-analyzer
 
 include:
-  - "app/schemas/**"
-  - "app/core/**"
   - "bento_services/**"

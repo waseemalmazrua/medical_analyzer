@@ -4,17 +4,15 @@
 import bentoml
 import logfire
 import torch
+from fastapi import FastAPI
 from gliner import GLiNER
 
-from app.schemas.ner import NEROutput, NerRequest
-from app.schemas.ping import PingResponse
 from bento_services.ner_config import ner_settings
+from bento_services.ner_schema import NEROutput, NerRequest
 
 # Load .env
 
 token = ner_settings.logfire_token
-if token is None:
-    raise ValueError("token logfire not available")
 
 # Logfire Configuration
 logfire.configure(
@@ -35,12 +33,19 @@ image = (
         "gliner==0.2.24",
         "logfire==4.32.1",
         "python-dotenv>=1.2.2",
+        "pydantic-settings>=2.14.0",
+        "fastapi>=0.136.1",
     )
     .run(
         'python -c "from gliner import GLiNER; '
         "GLiNER.from_pretrained('Ihor/gliner-biomed-large-v1.0')\""
     )
 )
+health_app = FastAPI()
+
+@health_app.get("/ping")
+async def health():
+    return {"status": "ok"}
 
 # Starting the BentoML Service
 @bentoml.service(
@@ -48,6 +53,7 @@ image = (
     resources={"gpu": 1},
     traffic={"timeout": 300},
 )
+@bentoml.asgi_app(health_app)
 class NERService:
     def __init__(self):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -81,17 +87,17 @@ class NERService:
             "demographic information",
         ]
 
-
-
-
-    @bentoml.api
-    def ping(self) -> PingResponse:
-        return PingResponse(status="ok")
-
-
     # GLiNER predict
     @bentoml.api
     def extract_entities(self, request: NerRequest) -> NEROutput:
+
+
+        logfire.info(
+            "GliNER Input Received",
+            text_length=len(request.text),
+        )
+
+
         with logfire.span(
             "Gliner predict",
             text_length=len(request.text),

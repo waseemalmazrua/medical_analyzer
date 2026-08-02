@@ -1,16 +1,14 @@
 # app/clients/whisper_client.py
-import os
 
 import logfire
-from dotenv import load_dotenv
 from groq import Groq
 
-load_dotenv()
+from app.core.config import settings
 
 
 class WhisperClient:
     def __init__(self) -> None:
-        api_key = os.getenv("GROQ_API_KEY")
+        api_key = settings.groq_api_key.get_secret_value()
         if api_key is None:
             raise ValueError("groq key not found")
 

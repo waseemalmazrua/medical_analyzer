@@ -7,6 +7,9 @@ def setup_observability(app: FastAPI) -> None:
 
     logfire.configure(service_name="CLAIRA", distributed_tracing=True)
 
+    # system metrics tracing
+    logfire.instrument_system_metrics()
+
     # FastAPI tracing
     logfire.instrument_fastapi(app)
 

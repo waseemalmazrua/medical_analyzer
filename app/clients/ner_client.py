@@ -3,14 +3,11 @@
 
 import httpx
 import logfire
-from dotenv import load_dotenv
 
-from app.core.config import settings
-from app.schemas.ner import NEROutput, NerRequest
+from bento_services.ner_config import ner_settings
+from bento_services.ner_schema import NEROutput, NerRequest
 
-load_dotenv()
-
-runpod = settings.runpod_api_key
+runpod = ner_settings.runpod_api_key.get_secret_value()
 
 if not runpod:
     raise RuntimeError("RUNPOD_API_KEY is not loaded")

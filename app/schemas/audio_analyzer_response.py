@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from app.schemas.agent_output import ClinicalReport
-from app.schemas.ner import Entity
+from bento_services.ner_schema import Entity
 
 
 class AudioAnalyzerResponse(BaseModel):
