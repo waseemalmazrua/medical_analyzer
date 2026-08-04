@@ -2,126 +2,145 @@
 
 ## Medical Voice Analyzer
 
-AI-powered clinical voice analysis system that transforms doctor speech into structured medical intelligence.
+AI-powered clinical voice analysis system that transforms clinician speech into structured clinical intelligence.
 
 ---
 
 ## Overview
 
-CLAIRA enables clinicians to record (maybe CLAIRA v2) or upload medical conversations and automatically generates structured clinical insights using AI.
+CLAIRA Voice analyzes clinical audio and automatically generates structured medical documentation using a modular AI pipeline.
 
-The system can:
+The current version supports audio upload via HTTP and performs:
 
-* Convert doctor speech into medical transcripts
-* Extract diseases, symptoms, medications, dosages, labs, and demographics
-* Generate structured clinical summaries
-* Create SOAP notes and recommendations
-* Highlight possible medical risks
-* Provide AI-assisted clinical reasoning
+- Speech-to-text transcription
+- Medical entity extraction
+- AI-powered clinical reasoning
+- Structured clinical report generation
+
+Designed with a strong focus on:
+
+- Quality
+- Reliability
+- Security
+- Healthcare AI best practices
 
 ---
 
 ## Tech Stack
 
-| Tool                | Role                                       |
-| ------------------- | ------------------------------------------ |
-| `Faster-Whisper`    | Speech-to-text transcription               |
-| `GLiNER Biomedical` | Medical entity extraction                  |
-| `OPENAI GPT-5.2`    | Clinical reasoning + summarization         |
-| `Pydantic AI`       | Structured AI orchestration and validation |
-| `FastAPI`           | API gateway and orchestration              |
-| `BentoML`           | Model serving and inference                |
-| `httpx`             | Service-to-service communication           |
-| `Logfire`           | Monitoring and tracing                     |
+| Technology | Purpose |
+|------------|---------|
+| **FastAPI** | API gateway and request orchestration |
+| **Pydantic AI** | AI agent orchestration and structured outputs |
+| **OpenAI GPT** | Clinical reasoning and report generation |
+| **Faster-Whisper**(for Now is groq Whisper API)| Speech-to-text transcription |
+| **GLiNER Biomedical** | Medical entity recognition (NER) |
+| **SQLModel** | ORM and database models |
+| **Supabase Auth** | Authentication |
+| **Supabase PostgreSQL** | Relational database |
+| **Redis Cloud** | Audio caching and rate limiting |
+| **BentoML** | AI model serving |
+| **RunPod** | GPU inference infrastructure |
+| **FastAPI Cloud** | Backend deployment |
+| **httpx** | Internal service communication |
+| **Logfire** | Observability, monitoring, and tracing |
 
 ---
 
-## Architecture
+## System Architecture
 
 ```text
-Doctor Audio
-      ↓
-Whisper Service
-(audio → transcript)
-      ↓
-Medical Correction Layer
-(correct medical terminology)
-      ↓
-Medical NER Service
-(extract symptoms, medications, diseases, labs)
-      ↓
-Pydantic AI Agent + GPT
-(clinical reasoning + structured report)
-      ↓
-FastAPI Response
-      ↓
-Frontend Dashboard
+                  Doctor Audio
+                        │
+                        ▼
+             Faster-Whisper Service
+             (Speech → Transcript)
+                        │
+                        ▼
+             Medical Correction Layer (later)
+                        │
+                        ▼
+          GLiNER Biomedical NER Service
+                        │
+                        ▼
+        Pydantic AI + OpenAI GPT-5.2
+      (Clinical reasoning & report)
+                        │
+                        ▼
+               FastAPI API Gateway
+                        │
+                        ▼
+              React Frontend Dashboard
 ```
 
 ---
 
-## System Design
+## Infrastructure
 
-CLAIRA follows a microservice-based AI architecture.
-
-### Services
-
-| Service           | Responsibility                                  |
-| ----------------- | ----------------------------------------------- |
-| `Whisper Service` | Speech transcription                            |
-| `NER Service`     | Medical entity extraction                       |
-| `AI Agent Layer`  | Clinical reasoning and report generation        |
-| `FastAPI Gateway` | Request orchestration                           |
-| `Frontend`        | Recording, transcript, and report visualization |
-
----
-
-## Features
-
-* Medical voice recording
-* Audio upload support
-* AI-powered transcription
-* Medical entity extraction
-* Structured clinical summaries
-* SOAP note generation
-* Risk analysis
-* Clinical recommendations
-* Exportable reports
-* Real-time monitoring
+```text
+                    React Frontend
+                           │
+                           ▼
+                    FastAPI Cloud
+                           │
+                           ▼
+                     FastAPI Backend
+                           │
+        ┌──────────────────┼──────────────────┐
+        │                  │                  │
+        ▼                  ▼                  ▼
+   Redis Cloud      Supabase PostgreSQL   AI Services
+(Cache & Rate Limit)     SQLModel         BentoML + RunPod
+                                                │
+                                                ▼
+                                     Whisper + GLiNER + GPT
+```
 
 ---
 
-## Example Pipeline
+## AI Pipeline
 
 ```text
 Doctor Voice
-↓
-Whisper converts speech into text
-↓
-Medical NER extracts:
-- Diseases
-- Symptoms
-- Medications
-- Dosages
-- Lab results
-↓
-AI Agent generates:
-- Clinical Summary
-- SOAP Note
-- Risk Analysis
-- Recommendations
+      │
+      ▼
+Speech-to-Text (Whisper)
+      │
+      ▼
+Medical Entity Recognition
+      │
+      ▼
+Clinical Reasoning Agent
+      │
+      ▼
+Structured Clinical Report
 ```
 
+---
+
+## Current Features
+
+- Audio upload
+- Speech-to-text transcription
+- Medical entity extraction
+- Structured clinical report generation
+- Clinical reasoning
+- Audio caching
+- Rate limiting
+- Authentication
+- API-first architecture
+- Docker deployment
+- Cloud GPU inference
+- Distributed tracing & observability
 
 ---
 
 ## API Endpoints
 
-| Method | Endpoint                 | Description              |
-| ------ | ------------------------ | ------------------------ |
-| `POST` | `/medical/analyze-audio` | Analyze medical audio    |
-| `POST` | `/medical/upload-audio`  | Upload and analyze audio |
-| `GET`  | `/health`                | Health check             |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/medical/analyze-audio` | Analyze medical audio |
+| `GET` | `/health` | Health check |
 
 ---
 
@@ -129,81 +148,79 @@ AI Agent generates:
 
 ```json
 {
-  "transcript": "Patient reports chest pain and shortness of breath.",
-
-  "entities": {
-    "symptoms": [
-      "chest pain",
-      "shortness of breath"
-    ],
-    "conditions": [
-      "hypertension"
-    ],
-    "medications": [
-      "aspirin"
-    ]
-  },
-
   "report": {
-    "clinical_summary": "Patient presents with cardiopulmonary symptoms.",
-
-    "possible_risks": [
-      "Acute coronary syndrome"
-    ],
-
-    "recommendations": [
-      {
-        "title": "ECG",
-        "urgency": "high"
-      }
-    ]
+    "clinical_summary": "...",
+    "assessment": "...",
+    "plan": "...",
+    "medical_entities": {
+      "diseases": [],
+      "symptoms": [],
+      "medications": [],
+      "laboratory_tests": []
+    }
   }
 }
 ```
 
 ---
 
-## Frontend Vision
+## Engineering Priorities
 
-The frontend is designed as a modern clinical dashboard.
+The architecture follows the following engineering priorities:
 
-Features include:
+```
+Quality
+      ↓
+Reliability
+      ↓
+Security
+      ↓
+Cost
+      ↓
+Latency
+```
 
-* Voice recording (possible CLAIRA:v2)
-* Live recording indicators
-* Transcript visualization
-* Highlighted medical entities
-* Clinical summary cards
-* SOAP note viewer
-* Export functionality
-* Responsive healthcare-grade UI
+The system is designed with healthcare data in mind, following security best practices for handling **PHI (Protected Health Information)** and **PII (Personally Identifiable Information)** while keeping future HIPAA-oriented deployments in consideration.
 
 ---
 
 ## Roadmap
 
-* [x] Faster-Whisper integration
-* [x] Medical NER pipeline
-* [x] Pydantic AI structured outputs
-* [x] BentoML microservices
-* [ ] Real-time streaming transcription
-* [x] React frontend
-* [x] Authentication system
-* [x] PDF export
-* [x] Docker deployment
-* [x] Cloud GPU deployment
-* [ ] Multi-language support
+- [x] Faster-Whisper integration
+- [x] Medical NER pipeline
+- [x] Pydantic AI structured outputs
+- [x] FastAPI backend
+- [x] BentoML model serving
+- [x] Redis caching
+- [x] Rate limiting
+- [x] Authentication
+- [x] React frontend
+- [x] Docker deployment
+- [x] Cloud GPU deployment
+- [ ] Real-time WebSocket transcription
+- [ ] Streaming AI responses
+- [ ] Multi-language support
+- [ ] Multi-model inference
+- [ ] Clinical decision support
+
+---
+
+## Future Vision
+
+CLAIRA Voice is the first project under the **CLAIRA (Clinical Language AI Reasoning Assistant)** ecosystem.
+
+Future releases will expand beyond voice analysis into additional AI-powered clinical workflows while maintaining a modular microservice architecture.
 
 ---
 
 ## Disclaimer
 
-CLAIRA is intended for clinical assistance and research purposes only.
+CLAIRA is intended for clinical assistance, research, and educational purposes only.
 
-AI-generated outputs must always be reviewed by qualified healthcare professionals.
+AI-generated outputs must always be reviewed and validated by qualified healthcare professionals before clinical use.
 
 ---
 
 ## Author
 
-Waseem Almazrua
+**Waseem Almazrua**
