@@ -26,7 +26,6 @@ clinical_agent = Agent(
     output_retries=2,
     retries=2,
     model_settings=ModelSettings(
-        temperature=0.0,
         max_tokens=2000,
         timeout=300,
         thinking="minimal"

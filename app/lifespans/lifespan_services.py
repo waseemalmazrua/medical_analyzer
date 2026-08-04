@@ -8,13 +8,16 @@ from app.lifespans.services import Services
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
-
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     app.state.services = Services()
+
+    # اختياري: تأكد أن Redis متصل قبل بدء استقبال الطلبات
+    await app.state.services.redis.ping()
 
     try:
         yield
     finally:
         app.state.services.whisper.close()
         await app.state.services.ner.aclose()
+        await app.state.services.redis.aclose()
         await engine.dispose()

@@ -169,7 +169,7 @@ The frontend is designed as a modern clinical dashboard.
 
 Features include:
 
-* Voice recording
+* Voice recording (possible CLAIRA:v2)
 * Live recording indicators
 * Transcript visualization
 * Highlighted medical entities
@@ -187,11 +187,11 @@ Features include:
 * [x] Pydantic AI structured outputs
 * [x] BentoML microservices
 * [ ] Real-time streaming transcription
-* [ ] React frontend
-* [ ] Authentication system
-* [ ] PDF export
-* [ ] Docker deployment
-* [ ] Cloud GPU deployment
+* [x] React frontend
+* [x] Authentication system
+* [x] PDF export
+* [x] Docker deployment
+* [x] Cloud GPU deployment
 * [ ] Multi-language support
 
 ---

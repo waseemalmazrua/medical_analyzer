@@ -1,14 +1,17 @@
 from functools import cache
 
-from pydantic import Field, PostgresDsn, SecretStr
+from pydantic import Field, PostgresDsn, RedisDsn, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     database_url: PostgresDsn = Field(alias="DATABASE_URL")
+    redis_url: RedisDsn
+
     openai_api_key: SecretStr
     groq_api_key: SecretStr
     runpod_api_key: SecretStr
+
  
 
     model_config = SettingsConfigDict(

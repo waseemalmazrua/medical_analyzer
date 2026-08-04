@@ -17,4 +17,9 @@ def setup_observability(app: FastAPI) -> None:
     logfire.instrument_httpx()
 
     # Pydantic AI tracing
-    logfire.instrument_pydantic_ai()
+    logfire.instrument_pydantic_ai(include_content=False)
+
+    # redis
+    logfire.instrument_redis()
+
+

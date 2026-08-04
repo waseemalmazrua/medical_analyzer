@@ -1,5 +1,6 @@
 # app/api/routes.py
 
+import hashlib
 from typing import Annotated
 
 import httpx
@@ -29,6 +30,16 @@ async def analyze_audio(
         # اقرأ ملف الصوت
         audio_bytes = await file.read()
 
+        if not audio_bytes:
+            raise HTTPException(status_code=400, detail="Invalid audio file")
+
+
+        cached_response = await services.audio_cache.get(audio_bytes)
+
+        if cached_response is not None:
+            return cached_response
+
+
         # 1) Whisper ASR
         whisper_result = await services.whisper.transcribe(
             filename=file.filename,
@@ -50,9 +61,18 @@ async def analyze_audio(
         )
 
         # 4) Final Response
-        return AudioAnalyzerResponse(
+        response = AudioAnalyzerResponse(
             report=report,
         )
+    
+        await services.audio_cache.set(
+            audio_bytes=audio_bytes,
+            response=response,
+        )
+
+        return response
+
+    
 
     except HTTPException:
         raise
