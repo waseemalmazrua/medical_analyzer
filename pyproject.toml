@@ -8,6 +8,7 @@ dependencies = [
     "alembic>=1.18.5",
     "asyncpg>=0.31.0",
     "bentoml>=1.4.38",
+    "fastapi-redis-sdk[otel]==0.8.0",
     "fastapi[standard]>=0.136.1",
     "faster-whisper>=1.2.1",
     "gliner>=0.2.24",
@@ -28,6 +29,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.3.0",
     "ruff>=0.16.0",
     "ty>=0.0.64",
 ]

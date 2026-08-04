@@ -1,10 +1,10 @@
 # app/api/routes.py
 
-import hashlib
 from typing import Annotated
 
 import httpx
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
+from redis_fastapi import rate_limit
 
 from app.agents.analyzer_agent import generate_clinical_report
 from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
@@ -16,12 +16,27 @@ router = APIRouter(tags=["Medical Analysis"])
 # ner_client = NERClient()
 
 
-@router.post("/analyze-audio")
+@router.post(
+    "/analyze-audio",
+    dependencies=[
+        Depends(
+            rate_limit(
+                "2/second",
+                scope="analyze-audio:burst",
+            )
+        ),
+        Depends(
+            rate_limit(
+                "10/minute",
+                scope="analyze-audio:sustained",
+            )
+        ),
+    ],
+)
 async def analyze_audio(
     request: Request,
     file: Annotated[UploadFile, File()],
 ) -> AudioAnalyzerResponse:
-
     if not file.content_type or not file.content_type.startswith("audio/"):
         raise HTTPException(status_code=400, detail="Invalid audio file")
 
