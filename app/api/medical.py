@@ -9,7 +9,7 @@ from app.agents.analyzer_agent import generate_clinical_report
 from app.schemas.audio_analyzer_response import AudioAnalyzerResponse
 from bento_services.ner_schema import NerRequest
 
-router = APIRouter(prefix="/medical", tags=["Medical Analysis"])
+router = APIRouter(tags=["Medical Analysis"])
 
 # whisper_client = WhisperClient()
 # ner_client = NERClient()
@@ -51,9 +51,6 @@ async def analyze_audio(
 
         # 4) Final Response
         return AudioAnalyzerResponse(
-            filename=file.filename,
-            transcript=transcript,
-            entities=entities,
             report=report,
         )
 

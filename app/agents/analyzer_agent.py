@@ -1,18 +1,37 @@
 
 import logfire
-from pydantic_ai import Agent
+from openai import AsyncOpenAI
+from pydantic_ai import Agent, ModelSettings
+from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.providers.openai import OpenAIProvider
 
 from app.core.config import settings
 from app.schemas.agent_output import ClinicalReport
 
-api_key = settings.openai_api_key.get_secret_value()
-if api_key is None:
-    raise ValueError("OPENAI API key is not available")
+openai_client = AsyncOpenAI(
+    api_key=settings.openai_api_key.get_secret_value(),
+)
+
+model = OpenAIChatModel(
+    "gpt-5-mini",
+    provider=OpenAIProvider(
+        openai_client=openai_client,
+    ),
+)
 
 
 clinical_agent = Agent(
-    "openai:gpt-5.2",
+    model=model,
     output_type=ClinicalReport,
+    output_retries=2,
+    retries=2,
+    model_settings=ModelSettings(
+        temperature=0.0,
+        max_tokens=2000,
+        timeout=300,
+        thinking="minimal"
+        
+    ),
     instructions="""
 You are a clinical documentation assistant.
 
@@ -58,7 +77,7 @@ Generate a structured clinical report.
     ):
         result = await clinical_agent.run(prompt)
 
-        usage = result.usage().input_tokens
+        usage = result.usage()
 
         logfire.info(
             "LLM completed",
